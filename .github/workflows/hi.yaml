@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-20.04
     environment: production
     needs: [test-condition-4]
-    if: ${{ always () && needs.test-condition-4.outputs.flag == "true" }}
+    if: ${{ always () && needs.test-condition-4.outputs.flag == 'true' }}
     steps:
       - uses: actions/checkout@v3
 
