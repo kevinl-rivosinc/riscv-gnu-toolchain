@@ -1,0 +1,30 @@
+name: test-cancel
+
+on:
+  push:
+    branches:
+      - test-cancelled
+jobs:
+  init-submodules:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+  creg: # Check Regressions. Short name so I can see the matrix string in github
+    needs: [init-submodules]
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [newlib, linux]
+        target:
+          [
+            rv32gcv-ilp32d, # rv32 vector
+            rv64gcv-lp64d, # rv64 vector
+          ]
+        multilib: [non-multilib]
+    uses: ./.github/workflows/hi.yaml
+    with:
+      mode: ${{ matrix.mode }}
+      target: ${{ matrix.target }}
+      multilib: ${{ matrix.multilib }}
