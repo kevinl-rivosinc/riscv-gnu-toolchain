@@ -1,0 +1,92 @@
+name: hi
+
+# comment
+on:
+  workflow_call:
+    inputs:
+      mode:
+        required: true
+        type: string
+      target:
+        required: true
+        type: string
+      multilib:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    environment: production
+    if: ${{ !contains('linux:rv64gcv-lp64d', format('{0}:{1}', inputs.mode, inputs.target)) }}
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: say hi
+        id: build-success
+        run: |
+          echo "hello world from ${{ inputs.mode }}-${{ inputs.target }}-some_hash-${{ inputs.multilib }}"
+          export BUILD_SUCCESS="success"
+          echo $BUILD_SUCCESS
+          echo "build_success=$BUILD_SUCCESS" >> "$GITHUB_OUTPUT"
+
+    outputs:
+      build_success: ${{ steps.build-success.outputs.build_success }}
+
+  test:
+    timeout-minutes: 1
+    runs-on: ubuntu-20.04
+    environment: production
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: do something
+        run: |
+          echo 'ran even though build failed'
+          sleep 300
+
+  test-condition-2:
+    runs-on: ubuntu-20.04
+    environment: production
+    needs: [build, test]
+    if: ${{ failure() && needs.build.outputs.build_success == 'success' }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: do something
+        run: |
+          echo ${{ needs.build.outputs.build_success }}
+
+  test-condition-3:
+    runs-on: ubuntu-20.04
+    environment: production
+    if: ${{ contains('linux:rv64gcv-lp64d', format('{0}:{1}', inputs.mode, inputs.target))}}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: do something
+        run: |
+          echo hi
+
+  test-condition-4:
+    runs-on: ubuntu-20.04
+    environment: production
+    needs: [test]
+    if: ${{ cancelled() }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: sleep
+        run: sleep 5
+
+  test-condition-5:
+    runs-on: ubuntu-20.04
+    environment: production
+    needs: [test-condition-4]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: hi
+        run: echo hi
