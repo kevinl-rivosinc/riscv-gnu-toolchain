@@ -81,10 +81,18 @@ jobs:
       - name: sleep
         run: sleep 5
 
+      - name: set flag
+        id: flag
+        echo "hi=true" >> $GITHUB_OUTPUT
+
+    outputs:
+      flag: ${{ steps.flag.outputs.hi }}
+
   test-condition-5:
     runs-on: ubuntu-20.04
     environment: production
     needs: [test-condition-4]
+    if: ${{ needs.test-condition-4.outputs.flag }}
     steps:
       - uses: actions/checkout@v3
 
