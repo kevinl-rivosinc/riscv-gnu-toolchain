@@ -34,6 +34,7 @@ jobs:
         run: |
           echo ${{ github.action.steps.id }}
           echo ${{ github.action }}
+          echo $GITHUB_RUN_NUMBER
         
 
     outputs:
