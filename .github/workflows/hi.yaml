@@ -33,6 +33,8 @@ jobs:
       - name: job id
         run: |
           echo ${{ github.job }}
+          echo ${{ github.job.id }}
+          echo ${{ github.job.number }}
           echo ${{ github.job_id }}
         
 
