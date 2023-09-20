@@ -32,10 +32,8 @@ jobs:
           echo "build_success=$BUILD_SUCCESS" >> "$GITHUB_OUTPUT"
       - name: job id
         run: |
-          echo ${{ github.job }}
-          echo ${{ github.job.id }}
-          echo ${{ github.job.number }}
-          echo ${{ github.job_id }}
+          echo ${{ github.run_number }}
+          echo ${{ github.run_id }}
         
 
     outputs:
@@ -65,48 +63,4 @@ jobs:
         run: |
           echo ${{ needs.build.outputs.build_success }}
 
-  test-condition-3:
-    runs-on: ubuntu-20.04
-    environment: production
-    # if: ${{ contains('linux:rv64gcv-lp64d', format('{0}:{1}', inputs.mode, inputs.target))}}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: do something
-        run: |
-          echo hi
-
-  test-condition-4:
-    runs-on: ubuntu-20.04
-    environment: production
-    needs: [test]
-    # if: ${{ cancelled() }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: sleep
-        run: sleep 10
-
-      - name: set flag
-        id: flag
-        run: |
-          echo "hi=true" >> $GITHUB_OUTPUT
-
-    outputs:
-      flag: ${{ steps.flag.outputs.hi }}
-
-  test-condition-5:
-    runs-on: ubuntu-20.04
-    environment: production
-    needs: [test-condition-4]
-    # if: ${{ always () && needs.test-condition-4.outputs.flag == 'true' }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: do something
-        run: sleep 10
-
-      - name: say something
-        run: echo hi
-
-
+  
