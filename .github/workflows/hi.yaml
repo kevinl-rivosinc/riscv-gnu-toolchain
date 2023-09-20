@@ -32,8 +32,8 @@ jobs:
           echo "build_success=$BUILD_SUCCESS" >> "$GITHUB_OUTPUT"
       - name: job id
         run: |
-          echo ${{ github.run_number }}
-          echo ${{ github.run_id }}
+          echo ${{ github.action.steps.id }}
+          echo ${{ github.action }}
         
 
     outputs:
