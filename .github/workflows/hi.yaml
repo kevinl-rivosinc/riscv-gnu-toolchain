@@ -39,7 +39,7 @@ jobs:
       - name: fail
         id: fail
         run: |
-          false
+          true
 
       - name: run if fail
         if: ${{ steps.fail.outcome == 'failure' }}
