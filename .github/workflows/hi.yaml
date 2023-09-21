@@ -35,6 +35,21 @@ jobs:
           echo ${{ github.action.steps.id }}
           echo ${{ github.action }}
           echo $GITHUB_RUN_NUMBER
+
+      - name: fail
+        id: fail
+        run: |
+          false
+
+      - name: run if fail
+        if: ${{ steps.fail.outcome == 'failure' }}
+        run: |
+          echo "this works"
+
+      - name : test this fail
+        if: ${{ always() && steps.fail.outcome == 'failure' }}
+        run: |
+          echo "this also works"
         
 
     outputs:
