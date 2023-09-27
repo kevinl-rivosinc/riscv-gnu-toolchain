@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - test-simple-commands
+      - patchworks-ci
 jobs:
   init-submodules:
     runs-on: ubuntu-20.04
