@@ -25,9 +25,9 @@ jobs:
 
       - name: say hi
         run: |
-          echo $'something\n${{ multilib }}\n' > out
+          echo $'something\n${{ inputs.multilib }}\n' > out
           cat out
-          printf "something\n${{ target }}\n" > test
+          printf "something\n${{ inputs.target }}\n" > test
           cat test
         
 
