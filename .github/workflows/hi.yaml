@@ -24,32 +24,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: say hi
-        id: build-success
         run: |
-          echo "hello world from ${{ inputs.mode }}-${{ inputs.target }}-some_hash-${{ inputs.multilib }}"
-          export BUILD_SUCCESS="success"
-          echo $BUILD_SUCCESS
-          echo "build_success=$BUILD_SUCCESS" >> "$GITHUB_OUTPUT"
-      - name: job id
-        run: |
-          echo ${{ github.action.steps.id }}
-          echo ${{ github.action }}
-          echo $GITHUB_RUN_NUMBER
-
-      - name: fail
-        id: fail
-        run: |
-          true
-
-      - name: run if fail
-        if: ${{ steps.fail.outcome == 'failure' }}
-        run: |
-          echo "this works"
-
-      - name : test this fail
-        if: ${{ always() && steps.fail.outcome == 'failure' }}
-        run: |
-          echo "this also works"
+          echo $'something\n${{ multilib }}\n' > out
+          cat out
+          printf "something\n${{ target }}\n" > test
+          cat test
         
 
     outputs:
